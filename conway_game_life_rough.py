@@ -4,16 +4,20 @@ First attempt at Game of life, simple output for now
 If time allows, will try to implement pretty animation
 """
 
-
-import sys, argparse
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 import numpy as np
+
 
 ON = 1
 OFF = 0
 states = [ON, OFF]
 
 
-def updateGrid(grid, N): 
+
+#adding in some extra variables for animations, including one extra 4th variable I don't quite understand but
+#is being sent by animation when calling updateGrid
+def updateGrid(fillerVar, nextFrame, grid, N): 
 
 	#Here we will updoot our grid. After that, back in the while loop, print a new grid
 
@@ -44,6 +48,62 @@ def updateGrid(grid, N):
 			print(nearSum)
 			"""
 
+			if (int(grid[(x-1)%N, (y-1)%N]) == 100):
+				nearSum = nearSum - 100
+
+			if (int(grid[x, (y-1)%N]) == 100):
+				nearSum = nearSum - 100
+
+			if (int(grid[(x+1)%N, (y-1)%N]) == 100):
+				nearSum = nearSum - 100
+
+			if (int(grid[(x-1)%N, y]) == 100):
+				nearSum = nearSum - 100
+
+
+			if (int(grid[(x+1)%N, y]) == 100):
+				nearSum = nearSum - 100
+
+			if (int(grid[(x-1)%N, (y+1)%N]) == 100):
+				nearSum = nearSum - 100
+
+			if (int(grid[x, (y+1)%N]) == 100):
+				nearSum = nearSum - 100
+
+			if (int(grid[(x+1)%N, (y+1)%N]) == 100):
+				nearSum = nearSum - 100
+
+			"""
+			Have to put this here to keep them seprate 
+			
+
+			if (int(grid[(x-1)%N, (y-1)%N]) == 200):
+				nearSum = nearSum - 200
+
+			if (int(grid[x, (y-1)%N]) == 200):
+				nearSum = nearSum - 200
+
+			if (int(grid[(x+1)%N, (y-1)%N]) == 200):
+				nearSum = nearSum - 200
+
+			if (int(grid[(x-1)%N, y]) == 200):
+				nearSum = nearSum - 200
+
+
+			if (int(grid[(x+1)%N, y]) == 200):
+				nearSum = nearSum - 200
+
+			if (int(grid[(x-1)%N, (y+1)%N]) == 200):
+				nearSum = nearSum - 200
+
+			if (int(grid[x, (y+1)%N]) == 200):
+				nearSum = nearSum - 200
+
+			if (int(grid[(x+1)%N, (y+1)%N]) == 200):
+				nearSum = nearSum - 200
+
+			"""
+
 			#Conwhey thyme
 			if grid[x, y] == ON:
 				#if it's on and there's less than 2 or more than three, ded				
@@ -55,19 +115,29 @@ def updateGrid(grid, N):
 					futureGrid[x, y] = ON
 			
 
-			
+	#update the now current recalculated grid, set the next frame and return it animation
 	grid[:] = futureGrid[:]
+	nextFrame.set_data(grid)
+
+	return nextFrame
+
+
 
 def main():
-	#set our grid size 
-	N = 10
+
+	#set our grid size, have fun and change this to whatever you like :) 
+	N = 100
 
 	#create Grid
 	grid = np.array([])
 
 	#For now lets just toss in random numbers, nice format stuff later 
-	grid = np.random.choice(states, N*N, p=[0.3, 0.7]).reshape(N,N)
+	grid = np.random.choice(states, N*N, p=[0.15, 0.85]).reshape(N,N)
 
+
+	"""
+	created ealier when just outputing via print to make sure the actual conway code worked. 
+	pls ignore
 	i=0
 
 	print(grid)
@@ -84,6 +154,24 @@ def main():
 
 	#our actual output
 	print(grid)
+
+	"""
+
+
+	#reusing code from my CSCI 191T project. if work, why fix? 
+	#set up, create figure that is used to draw objects, and axes subplot for animation
+	gridFig, axES = plt.subplots()
+
+	#set up 
+	
+	nextFrame = axES.imshow(grid, cmap=plt.cm.gray)
+
+
+	#a lil libray useage I don't completely understand in order to make things print pretty
+	brainsAnimation = animation.FuncAnimation(gridFig, updateGrid, fargs=(nextFrame, grid, N ) ) 
+
+	#actually showing the animation
+	plt.show()
 
 
 
