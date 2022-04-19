@@ -15,6 +15,16 @@ states = [ON, OFF]
 
 
 
+def eGlide(grid, N): 
+	grid[3,1] = ON
+	grid[1,2] = grid[3,2] = ON
+	grid[2,3] = grid[3,3] = ON
+
+
+
+	
+
+
 #adding in some extra variables for animations, including one extra 4th variable I don't quite understand but
 #is being sent by animation when calling updateGrid
 def updateGrid(fillerVar, nextFrame, grid, N): 
@@ -48,62 +58,6 @@ def updateGrid(fillerVar, nextFrame, grid, N):
 			print(nearSum)
 			"""
 
-			if (int(grid[(x-1)%N, (y-1)%N]) == 100):
-				nearSum = nearSum - 100
-
-			if (int(grid[x, (y-1)%N]) == 100):
-				nearSum = nearSum - 100
-
-			if (int(grid[(x+1)%N, (y-1)%N]) == 100):
-				nearSum = nearSum - 100
-
-			if (int(grid[(x-1)%N, y]) == 100):
-				nearSum = nearSum - 100
-
-
-			if (int(grid[(x+1)%N, y]) == 100):
-				nearSum = nearSum - 100
-
-			if (int(grid[(x-1)%N, (y+1)%N]) == 100):
-				nearSum = nearSum - 100
-
-			if (int(grid[x, (y+1)%N]) == 100):
-				nearSum = nearSum - 100
-
-			if (int(grid[(x+1)%N, (y+1)%N]) == 100):
-				nearSum = nearSum - 100
-
-			"""
-			Have to put this here to keep them seprate 
-			
-
-			if (int(grid[(x-1)%N, (y-1)%N]) == 200):
-				nearSum = nearSum - 200
-
-			if (int(grid[x, (y-1)%N]) == 200):
-				nearSum = nearSum - 200
-
-			if (int(grid[(x+1)%N, (y-1)%N]) == 200):
-				nearSum = nearSum - 200
-
-			if (int(grid[(x-1)%N, y]) == 200):
-				nearSum = nearSum - 200
-
-
-			if (int(grid[(x+1)%N, y]) == 200):
-				nearSum = nearSum - 200
-
-			if (int(grid[(x-1)%N, (y+1)%N]) == 200):
-				nearSum = nearSum - 200
-
-			if (int(grid[x, (y+1)%N]) == 200):
-				nearSum = nearSum - 200
-
-			if (int(grid[(x+1)%N, (y+1)%N]) == 200):
-				nearSum = nearSum - 200
-
-			"""
-
 			#Conwhey thyme
 			if grid[x, y] == ON:
 				#if it's on and there's less than 2 or more than three, ded				
@@ -131,8 +85,15 @@ def main():
 	#create Grid
 	grid = np.array([])
 
+	#oneSquare(grid, N)
+
 	#For now lets just toss in random numbers, nice format stuff later 
-	grid = np.random.choice(states, N*N, p=[0.15, 0.85]).reshape(N,N)
+	#Uncomment below for random starting seeds
+	#grid = np.random.choice(states, N*N, p=[0.15, 0.85]).reshape(N,N)
+
+	#first line is just rechaping the grid two have two dementions, is required before adding any elements to grid
+	grid = np.zeros(N*N).reshape(N, N)
+	eGlide(grid, N)
 
 
 	"""
