@@ -20,6 +20,33 @@ def eGlide(grid, N):
 	grid[1,2] = grid[3,2] = ON
 	grid[2,3] = grid[3,3] = ON
 
+def gosperGun(grid, N):
+	grid[26,2] = ON
+	grid[24,3] = grid[26,3] = ON
+	grid[14,4] = grid[15,4] = grid[22,4] = grid[23,4] = grid[36,4] = grid[37,4] = ON
+	grid[13,5] = grid[17,5] = grid[22,5] = grid[23,5] = grid[36,5] = grid[37,5] = ON
+	grid[2,6] = grid[3,6] = grid[12,6] = grid[18,6] = grid[22,6] = grid[23,6] = ON
+	grid[2,7] = grid[3,7] = grid[12,7] = grid[16,7] = grid[18,7] = grid[19,7] = grid[24,7] = grid[26,7] = ON
+	grid[12,8] = grid[18,8] = grid[26,8] = ON
+	grid[13,9] = grid[17,9] = ON
+	grid[14,10] = grid[15,10] = ON
+
+def fPent(grid, N):
+	grid[101,100] = grid[102,100] = ON
+	grid[100,101] = grid[101,101] = ON
+	grid[101,102] = ON
+
+
+
+
+def gliderLight(grid, N):
+	
+	grid[2,1] = grid[5,1] = ON
+	grid[1,2] = ON
+	grid[1,3] = grid[5,3] = ON
+	grid[1,4] = grid[2,4] = grid[3,4] = grid[4,4] = ON
+	
+
 
 
 	
@@ -35,8 +62,8 @@ def updateGrid(fillerVar, nextFrame, grid, N):
 	futureGrid = grid.copy()
 
 	
-	for y in range(N):
-		for x in range(N):
+	for x in range(N):
+		for y in range(N):
 
 			#add together a cell's 8 homies
 			# we'll ur 'toriodal bounder conditions, ei, we'll basically have any values that 
@@ -50,8 +77,7 @@ def updateGrid(fillerVar, nextFrame, grid, N):
 			print((grid[(x-1)%N, (y-1)%N] + grid[x, (y-1)%N] + grid[(x+1)%N, (y-1)%N] +
 				grid[(x-1)%N, y] + grid[(x+1)%N, y] +
 			   grid[(x-1)%N, (y+1)%N] + grid[x, (y+1)%N] + grid[(x+1)%N, (y+1)%N]))
-			"""
-			"""
+			
 			print( ((x-1)%N, (y-1)%N), (x, (y-1)%N), ((x+1)%N, (y-1)%N),
 				((x-1)%N, y) ,((x+1)%N, y) , 
 				((x-1)%N, (y+1)%N) , (x, (y+1)%N) , ((x+1)%N, (y+1)%N))
@@ -67,7 +93,7 @@ def updateGrid(fillerVar, nextFrame, grid, N):
 				#Reproduction
 				if nearSum == 3:
 					futureGrid[x, y] = ON
-			
+
 
 	#update the now current recalculated grid, set the next frame and return it animation
 	grid[:] = futureGrid[:]
@@ -80,7 +106,7 @@ def updateGrid(fillerVar, nextFrame, grid, N):
 def main():
 
 	#set our grid size, have fun and change this to whatever you like :) 
-	N = 100
+	N = 200
 
 	#create Grid
 	grid = np.array([])
@@ -89,12 +115,21 @@ def main():
 
 	#For now lets just toss in random numbers, nice format stuff later 
 	#Uncomment below for random starting seeds
-	#grid = np.random.choice(states, N*N, p=[0.15, 0.85]).reshape(N,N)
+	grid = np.random.choice(states, N*N, p=[0.6, 0.4]).reshape(N,N)
 
 	#first line is just rechaping the grid two have two dementions, is required before adding any elements to grid
-	grid = np.zeros(N*N).reshape(N, N)
-	eGlide(grid, N)
+	#grid = np.zeros(N*N).reshape(N, N)
+	#eGlide(grid, N)
 
+	#having fun with new objects
+	#grid = np.zeros(N*N).reshape(N, N)
+	#gliderLight(grid, N)
+
+	#grid = np.zeros(N*N).reshape(N, N)
+	#gosperGun(grid, N)
+
+	#grid = np.zeros(N*N).reshape(N, N)
+	#fPent(grid, N)
 
 	"""
 	created ealier when just outputing via print to make sure the actual conway code worked. 
@@ -119,6 +154,9 @@ def main():
 	"""
 
 
+	#Change me to make the animation go faster or slower
+	updootSpeed = 20
+
 	#reusing code from my CSCI 191T project. if work, why fix? 
 	#set up, create figure that is used to draw objects, and axes subplot for animation
 	gridFig, axES = plt.subplots()
@@ -127,9 +165,9 @@ def main():
 	
 	nextFrame = axES.imshow(grid, cmap=plt.cm.gray)
 
-
+	plt.get_current_fig_manager().window.state('zoomed')
 	#a lil libray useage I don't completely understand in order to make things print pretty
-	brainsAnimation = animation.FuncAnimation(gridFig, updateGrid, fargs=(nextFrame, grid, N ) ) 
+	brainsAnimation = animation.FuncAnimation(gridFig, updateGrid, fargs=(nextFrame, grid, N ), frames=60 , interval=updootSpeed ) 
 
 	#actually showing the animation
 	plt.show()
